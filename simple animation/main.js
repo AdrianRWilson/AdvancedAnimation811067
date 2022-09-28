@@ -27,7 +27,8 @@ function animate() {
 // move the circle to a new location
 function update() {
     x += dx;    // update x coordinate of location with x velocity
-    y += dy;    // update y coordinate of location with y velocity
+    y += dy;    // update y coordinate of location with y velocity 
+    
 }
 
 // render a circle
