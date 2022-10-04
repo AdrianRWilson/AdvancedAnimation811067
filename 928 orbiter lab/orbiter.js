@@ -5,10 +5,8 @@ var Orbiter = function (x, y, r, i, orbiterAmount) {
     this.orbitalDistance = 30;
     this.angleVelocity = 0.1;
     this.orbiterAmount = orbiterAmount;
-    this.increment = i;
-    console.log(this.increment);
-    this.angle = this.increment * (360/this.orbiterAmount);
-    console.log(this.angle);
+    this.increment = i + 1;
+    this.angle = this.increment * (Math.PI*2/this.orbiterAmount);
 }
 
 Orbiter.prototype.update = function (x, y) {

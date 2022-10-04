@@ -6,7 +6,7 @@ var planets=[];
 function init(){
     canvas = document.getElementById("cnv");
     context = canvas.getContext("2d");
-    let planetAmount = 10;
+    let planetAmount = randomNumber(3, 50);
     CreatePlanets(planetAmount);
     animate(); 
 }
@@ -31,5 +31,5 @@ function animate() {
 }
 
 function randomNumber(min, max) { 
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min) + min);
 } 

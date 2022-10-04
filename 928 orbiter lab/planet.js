@@ -6,7 +6,7 @@ var Planet = function (x, y, r) {
     this.vel = new JSVector(this.speed, this.speed);
 
     this.orbiters = [];
-    this.orbiterAmount = 6;
+    this.orbiterAmount = randomNumber(0, 20);
     for (let i = 0; i < this.orbiterAmount; i++) {
         this.rad = 5;
         this.amt = this.orbiterAmount;
