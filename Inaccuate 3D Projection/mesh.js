@@ -48,9 +48,9 @@ class Mesh {
     }
 
     rotate() {
-        // this.rotationX += 0.001
-        // this.rotationY += 0.01
-        // this.rotationZ += 0.001
+        this.rotationX += 0.001
+        this.rotationY += 0.01
+        this.rotationZ += 0.001
         console.log(Math.sin(frame/100) * 100);
         this.render();
     }
