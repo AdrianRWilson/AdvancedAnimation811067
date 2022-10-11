@@ -2,6 +2,7 @@
 //Sept. 29, 2022
 
 let world;
+
 window.onload = init;
 
 function init(){
@@ -11,6 +12,7 @@ function init(){
 
 function animate(){
   world.run();
+ 
   requestAnimationFrame(animate);  
 }
 

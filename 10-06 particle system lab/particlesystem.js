@@ -59,7 +59,7 @@ ParticleSystem.prototype.render = function () {
 
 ParticleSystem.prototype.loadParticles = function(n) {
   for(let i = 0; i < n; i++) {
-    this.particles[i] = new Particle(this.loc.x, this.loc.y, 10, this.clr, this.ctx1, this.ctx2)
+    this.particles[i] = new Particle(this.loc.x, this.loc.y, this.rad, this.clr, this.ctx1, this.ctx2)
   }
 }
 

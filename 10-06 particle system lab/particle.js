@@ -4,9 +4,11 @@ function Particle(x, y, rad, clr, ctx1, ctx2) {
   this.acc = new JSVector(0, 0.1);
   this.ctx1 = ctx1;
   this.ctx2 = ctx2;
-  this.rad = randomNumber(2, rad);
+  this.initrad = rad;
+  this.rad = rad;
   this.clr = clr;
-  this.life = Math.floor(randomNumber(100, 200));
+  this.life = Math.floor(randomNumber(100, 600));
+  this.initlife = this.life;
   this.alive = true;
 }
 
@@ -15,6 +17,7 @@ Particle.prototype.update = function () {
   this.loc.add(this.vel);
   this.life--;
   this.checkLife(this.life, this.alive);
+  this.rad = (this.life/this.initlife) * this.rad * 3;
 }
 
 Particle.prototype.checkEdges = function () {
