@@ -10,7 +10,7 @@ function Vehicle(loc) {
   this.maxSpeed = document.getElementById("slider2").value;  // %%%%%%%%%%%%%%%%%
   this.maxForce = document.getElementById("slider1").value;  // %%%%%%%%%%%%%%%%%
   //############################################################################# not attached to slider
-  this.desiredSep = 10;//  desired separation between vehicles
+  this.desiredSep = 15;//  desired separation between vehicles
 
   this.scl = 3;
 }
@@ -30,18 +30,20 @@ Vehicle.prototype.flock = function(vehicles) {
   let sep = this.separate(vehicles);
   let ali = this.align(vehicles);
   let coh = this.cohesion(vehicles);
+  let seek = this.seek(world.herder);
   //  set multiples via sliders 
   let sepMult = document.getElementById("slider3").value; // %%%%%%%%%%%%%%%%%%
   let aliMult = document.getElementById("slider4").value;;  // %%%%%%%%%%%%%%%%%%
   let cohMult = document.getElementById("slider5").value;;    // %%%%%%%%%%%%%%%%%%
   //  calculate three forces
-  // sep.multiply(sepMult);
+  sep.multiply(sepMult);
   // ali.multiply(aliMult);
   // coh.multiply(cohMult);
   // //  add each of these to flockForce
-  // flockForce.add(sep);
-  // flockForce.add(ali);
+  flockForce.add(sep);
+  flockForce.add(ali);
   // flockForce.add(coh);
+  flockForce.add(seek);
   this.acc.add(flockForce);
 }
 //+++++++++++++++++++++++++++++++++  Flocking functions
@@ -51,16 +53,54 @@ Vehicle.prototype.applyForce = function (force) {
 
 Vehicle.prototype.separate = function (v) {
   // A vector for average of separation forces
-  // for (let currentVechicle = 0; currentVechicle < world.vehicles.length; currentVechicle++) {
-  //   const element = array[currentVechicle];
-    
-  // }
-  //return separationForce;
+  let sum = new JSVector(0, 0);
+  let ds = this.desiredSep*this.desiredSep;
+  let steer = new JSVector(0, 0); 
+  let count = 0;
+  for (let other = 0; other < v.length; other++) {
+    let d = this.loc.distanceSquared(v[other].loc);
+    if(d < ds && d > 0){
+      let diff = JSVector.subGetNew( this.loc, v[other].loc);
+      diff.normalize();
+      sum.add(diff);
+      count++;
+    }
+  }
+  
+  if(count !== 0){
+    sum.divide(count);
+    sum.normalize();
+    sum.multiply(this.maxSpeed);
+    steer = JSVector.subGetNew(sum, this.vel);
+    steer.limit(this.maxForce)
+  }
+  let separationForce = steer;
+  return separationForce;
 }
 
 Vehicle.prototype.align = function (v) {
-  // A vector for average of align forces
-  //return steeringForce;
+  let neighbordist = 50;
+  let sum = new JSVector(0, 0);
+  let count = 0;
+  for (let other = 0; other < v.length; other++) {
+    let d = this.loc.distanceSquared(v[other].loc);
+    if ((d > 0) && (d < neighbordist)) {
+      sum.add(other.vel);
+      count++;
+    }
+  }
+
+  if (count > 0) {
+    sum.divide(count);
+    sum.normalize();
+    sum.multiply(this.maxSpeed);
+    let steer = JSVector.subGetNew(sum, this.vel);
+    steeringForce = steer;
+  } else {
+    steeringForce = new JSVector(0, 0);
+  }
+
+  return steeringForce;
 }
 
 Vehicle.prototype.cohesion = function (v) {
@@ -75,7 +115,7 @@ Vehicle.prototype.seek = function(target) {
   desired.multiply(this.maxSpeed);
   let steer = JSVector.subGetNew(desired, this.vel);
   steer.limit(this.maxForce);
-  this.applyForce(steer);
+  return steer;
 }
 //+++++++++++++++++++++++++++++++++  Flocking functions
 
@@ -83,8 +123,8 @@ Vehicle.prototype.update = function () {
   this.vel.add(this.acc);
   this.vel.limit(1);
   this.loc.add(this.vel);
-  this.seek(world.herder);
-  this.separate(this.loc);
+  
+  //this.separate(this.loc);
 }
 
 Vehicle.prototype.checkEdges = function () {
