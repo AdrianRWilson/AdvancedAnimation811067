@@ -31,4 +31,8 @@ function LightenDarkenColor(col, amt) {
     var g = (num & 0x0000FF) + amt;
     var newColor = g | (b << 8) | (r << 16);
     return newColor.toString(16);
-  }
+}
+
+function randomNumber(min, max) { 
+    return Math.floor(Math.random() * (max - min) + min);
+} 
