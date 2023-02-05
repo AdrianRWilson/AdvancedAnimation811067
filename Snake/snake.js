@@ -3,23 +3,28 @@
 function Snake(location, numSegs, segLength) {
     //  number of segments, segment length
     this.loc = location;
-    this.vel = new JSVector(getRandomInt(-2, 2), getRandomInt(-2, 2));
+    this.speed = 3;
+    this.vel = new JSVector(getRandomArbitrary(-this.speed, this.speed), getRandomArbitrary(-this.speed, this.speed));
+    this.perpendicularVel = this.vel.rotate(Math.PI/2);
     this.numSegs = numSegs;
     this.segLength = segLength;
     this.segments = [];
     this.loadSegments();
+    this.context = context;
+    this.canvas = canvas;
+
+    this.orbiters = [];
+    for (let i = 0; i < 1; i++) {
+        this.rad = 5;
+        this.amt = 1;
+        this.orbiters[i] = new Orbiter(this.loc.x, this.loc.y, this.rad, i, this.amt, this.context, this.perpendicularVel);
+    }
 }
 
 Snake.prototype.loadSegments = function () {
-    for (let i = 0; i < this.numSegs; i++) {
-      this.segments[i] = new JSVector(this.loc.x, this.loc.y);
-      if(i == 0) {
-        this.segments[i].sub(this.vel);
-      } else {
-        let currSeg = new JSVector(0, 0);
-        currSeg = JSVector.subGetNew(this.segments[i-1], this.vel);
-        this.segments[i].sub(currSeg);
-      }
+    for(let i = 0; i < this.numSegs; i++) {
+        let angle = this.vel.getDirection();
+        this.segments[i] = new JSVector((Math.cos(angle + Math.PI)  * this.segLength * (i+1)) + this.loc.x, (Math.sin(angle + Math.PI) * this.segLength * (i+1)) + this.loc.y);
     }
 }
 
@@ -32,17 +37,17 @@ Snake.prototype.run = function () {
 
 Snake.prototype.update = function () {
     this.loc.add(this.vel);
-    for (let i = 0; i < this.segments.length; i ++) {
-      if(i == 0) {
-        let acceleration = JSVector.subGetNew(this.loc, this.segments[i]);
-        acceleration.normalize();
-        acceleration.multiply(this.vel.getMagnitude());
-        this.segments[i].add(acceleration);
-      } else {
-        let acceleration = JSVector.subGetNew(this.segments[i-1], this.segments[i]);
-        acceleration.normalize();
-        this.segments[i].add(acceleration);
-      }
+
+    for (let i = 0; i < this.orbiters.length; i++) {
+        this.orbiters[i].run(this.loc.x, this.loc.y);
+    }
+
+    this.segments[0] = this.loc;
+    for (let i = 1; i < this.segments.length; i ++) {
+        let connectionVector = JSVector.subGetNew(this.segments[i]  , this.segments[i - 1]);
+        connectionVector.setMagnitude(Math.abs(Math.sin(((((this.segments.length - i))/this.segments.length) * 3600) * (Math.PI/180)) * 5));
+        connectionVector.add(this.segments[i - 1]);
+        this.segments[i] = connectionVector;
     }
 }
 

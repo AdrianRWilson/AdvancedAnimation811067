@@ -5,7 +5,7 @@ function World(){
 
     for( let i = 0; i < numSnakes; i++){
         let loc = new JSVector(Math.random()*this.canvas.width, Math.random()*this.canvas.height);
-        snakes[i] = new Snake(loc, 10, 30);
+        snakes[i] = new Snake(loc, 40, 3, this.ctx, this.canvas);
     }
 }
 

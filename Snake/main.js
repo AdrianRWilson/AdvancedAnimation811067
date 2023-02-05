@@ -3,7 +3,7 @@
 
 let world;   // a single global object
 let snakes = [];
-let numSnakes = 2;  
+let numSnakes = 10;
 
 window.onload = init;//  After the window has been loaded, go to init
 function init(){
@@ -20,8 +20,19 @@ function animate(){
     requestAnimationFrame(animate);
 }
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function LightenDarkenColor(col, amt) {
+    var num = parseInt(col, 16);
+    var r = (num >> 16) + amt;
+    var b = ((num >> 8) & 0x00FF) + amt;
+    var g = (num & 0x0000FF) + amt;
+    var newColor = g | (b << 8) | (r << 16);
+    return newColor.toString(16);
+}
+
+function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
 }
