@@ -1,6 +1,6 @@
 // Snake constructor
 
-function Snake(location, numSegs, segLength, context, canvas) {
+function Snake(location, numSegs, segLength) {
     //  number of segments, segment length
     this.loc = location;
     this.speed = 3;
@@ -32,7 +32,7 @@ Snake.prototype.run = function () {
     this.checkEdges();
     this.update();
     this.render();
-    
+
 }
 
 Snake.prototype.update = function () {
@@ -52,19 +52,23 @@ Snake.prototype.update = function () {
 }
 
 Snake.prototype.render = function () {
+    world.ctx.beginPath();
+    world.ctx.arc(this.loc.x, this.loc.y, 10, 0, 2 * Math.PI);
+    world.ctx.fillStyle = "black";
+    world.ctx.fill();
     for(let i = 0; i < this.segments.length; i++) {
-        this.context.beginPath();
-        this.context.arc(this.segments[i].x, this.segments[i].y, 5, 0, 2 * Math.PI);
-        this.context.fillStyle = "rgba(0, 0, 0, 1)";
-        this.context.fill();
+        world.ctx.beginPath();
+        world.ctx.arc(this.segments[i].x, this.segments[i].y, 5, 0, 2 * Math.PI);
+        world.ctx.fillStyle = "blue";
+        world.ctx.fill();
     }
 }
 
 Snake.prototype.checkEdges = function () {
-    if (this.loc.x > this.canvas.width || this.loc.x < 0) {
+    if (this.loc.x > world.canvas.width || this.loc.x < 0) {
         this.vel.x = -this.vel.x;
     }
-    if (this.loc.y > this.canvas.height || this.loc.y < 0) {
+    if (this.loc.y > world.canvas.height || this.loc.y < 0) {
         this.vel.y = -this.vel.y;
     }
 }
