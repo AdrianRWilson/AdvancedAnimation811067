@@ -1,137 +1,128 @@
-
 // JSVector -- a Javascript 2D vector class
 
 // The class constructor
-function JSVector(x = 0, y = 0){
+function JSVector(x = 0,y = 0){
     this.x = x;
     this.y = y;
 }
 
+
 // Set the magnitude of the vector,
 // retaining the angle (direction).
 JSVector.prototype.setMagnitude = function(mag){
-  let dir = this.getDirection();
-  this.x = Math.cos(dir)*mag;
-  this.y = Math.sin(dir)*mag;
-  return this;
+    let direct = this.getDirection();
+    this.x = mag * Math.cos(direct);
+    this.y = mag * Math.sin(direct);
+    return this;
 }
 
-// Get the magnitude of the vector using pythagorean theorem
+// Return the magnitude of the vector using pythagorean theorem
 JSVector.prototype.getMagnitude = function(){
-  return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
-}
+    return Math.sqrt((this.x*this.x) + (this.y*this.y));
+ }
 
 // Set the angle (direction) of the vector,
 // retaining the magnitude.
 JSVector.prototype.setDirection = function(angle){
-  let mag = this.getMagnitude();
-  this.x = Math.cos(angle)*mag;
-  this.y = Math.sin(angle)*mag;
-  return this;
+//     angle = Math.atan2(this.y, this.x);
+//     return angle;
+    let mag = this.getMagnitude();
+    this.x = mag * Math.cos(angle);
+    this.y = mag * Math.sin(angle);
+    return this;
 }
 
-// Get the direction (angle) of the vector
+// Return the direction (angle) of the vector
 JSVector.prototype.getDirection = function(){
-  return Math.atan2(this.y,this.x);
+    return Math.atan2(this.y, this.x);
 }
 
 // Add another vector to this vector
 JSVector.prototype.add = function(v2){
-  this.x += v2.x;
-  this.y += v2.y;
-  return this;
+    this.x += v2.x;
+    this.y += v2.y;
+    return this;
 }
 
 // Subtract another vector from this vector
 JSVector.prototype.sub = function(v2){
-  this.x -= v2.x;
-  this.y -= v2.y;
-  return this;
+    this.x -= v2.x;
+    this.y -= v2.y;
+    return this;
 }
 
 // Class method to return a new vector that is the sum of two vectors
 JSVector.addGetNew = function(v1,v2){
-  return new JSVector(v1.x + v2.x, v1.y + v2.y);
+    return new JSVector(v1.x + v2.x, v1.y+v2.y);
 }
 
 // Class method to return a new vector that is the difference of two vectors
 JSVector.subGetNew = function(v1,v2){
-  return new JSVector(v1.x - v2.x, v1.y - v2.y);
+    return new JSVector(v1.x - v2.x, v1.y-v2.y);
 }
 
 // Multiply this vector by a scalar
 JSVector.prototype.multiply = function(scalar){
-  this.x = this.x*scalar;
-  this.y = this.y*scalar;
-  return this;
+    this.x *= scalar;
+    this.y *= scalar;
+    return this;
 }
 
 // Divide this vector by a scalar
 JSVector.prototype.divide = function(scalar){
-  this.x = this.x/scalar;
-  this.y = this.y/scalar;
-  return this;
+    this.x /= scalar;
+    this.y /= scalar;
+    return this;
 }
 
 // Normalize this vector so that it has a magnitude of 1
 JSVector.prototype.normalize = function(){
-  let dir = this.getDirection();
-  this.x = Math.cos(dir);
-  this.y = Math.sin(dir);
-  return this;
-
+    this.setMagnitude(1);
+    return this;
 }
 
 // Limit the magnitude of this vector
 JSVector.prototype.limit = function(lim){
-    let mag = this.getMagnitude();
-    if(mag > lim)
+    if(this.getMagnitude() > lim){
         this.setMagnitude(lim);
+    }
     return this;
 }
 
-// Get the distance between this vector and another one
+// Return the distance between this vector and another one
 JSVector.prototype.distance = function(v2){
-    return Math.sqrt(this.distanceSquared(v2));
+    let v3 = JSVector.subGetNew(this, v2);
+    return v3.getMagnitude();
+
 }
 
-// Get square of the distance between this vector and another one
+// Return the square of the distance between this vector and another one
 JSVector.prototype.distanceSquared = function(v2){
-    let v = JSVector.subGetNew(this, v2);
-    return v.x*v.x + v.y*v.y;
+    let v3 = JSVector.subGetNew(this, v2);
+    return ((v3.x*v3.x) + (v3.y*v3.y));
+    
 }
 
 // Rotate this vector by some number of radians
 // using the rotation matrix |  cos   -sin  |
 //                           |  sin   +cos  |
-
 JSVector.prototype.rotate = function(angle) {
-    let vx = this.x, vy = this.y;
-    let cos = Math.cos(angle), sin = Math.sin(angle);
-    this.x = vx * cos - vy * sin;
-    this.y = vx * sin + vy * cos;
+    this.setDirection(this.getDirection()+angle);
     return this;
 }
 
-
-// Get the angle between this vector and another one
+// Return the angle between this vector and another one
 JSVector.prototype.angleBetween = function(v2){
-  return Math.abs(this.getDirection()-v2.getDirection());
+    return Math.abs(v2.getDirection()-this.getDirection());
 }
 
-// Make a copy of this vector
+// Return a copy of this vector
 JSVector.prototype.copy = function(){
-  return new JSVector(this.x,this.y);
+    
+    return new JSVector(this.x, this.y);
 }
 
-// Override inherited toString() to describe this instance
+// Override inherited toString() to return a description of this instance
 JSVector.prototype.toString = function() {
-    var x = this.x.toFixed(2);
-    var y = this.y.toFixed(2);
-    var m = this.getMagnitude().toFixed(2);
-    var a = this.getDirection().toFixed(2);
-
-    return("x:" + x + ", y: " + y + ", mag: " + m + ", a: " + a);
-
-    // return(` x: ${x_}, y: ${y_}, mag: ${m}, angle: ${a}`);
+    return "This vector has an x position of " + this.x + " and a y position of " + this.y + ". It has a magnitude of " + this.getMagnitude() + " and a direction of " + this.getDirection() + ".";
 }
