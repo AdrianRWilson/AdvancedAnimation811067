@@ -126,7 +126,6 @@ Vehicle.prototype.cohesion = function (v) {
   }
 
   return steeringForce;
-  //return cohesionForce;
 }
 
 Vehicle.prototype.seek = function(target) {

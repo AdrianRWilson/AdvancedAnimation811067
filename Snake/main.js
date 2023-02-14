@@ -2,8 +2,8 @@
 
 
 let world;   // a single global object
-let snakes = [];  
-let numSnakes = 10;  
+let snakes = [];
+let numSnakes = 10;
 
 window.onload = init;//  After the window has been loaded, go to init
 function init(){
@@ -33,6 +33,6 @@ function LightenDarkenColor(col, amt) {
     return newColor.toString(16);
 }
 
-function randomNumber(min, max) { 
+function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
-} 
+}
