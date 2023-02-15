@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lab 117 Start Code</title>
+    <link rel="stylesheet" type="text/css" href="mystyles.css">
+    <script src="main.js"></script>
+    <script src="jsvector.js"></script>
+    <script src="world.js"></script>
+    <script src="eventlisteners.js"></script>
+    <script src="player.js"></script>
+    <script src="platform.js"></script>
+    <script src="hostile.js"></script>
+    <script src="objects/trap.js"></script>
+    <script src="objects/regen.js"></script>
+    <script src="objects/explosion.js"></script>
+  </head>
+
+  <body>
+    <div id = "wrapperDiv">
+      <canvas id="cnv" width="800" height="400"></canvas>
+      <button id="PreviewLevelButton" onclick="world.previewLevel();">Preview Level</button>
+    </div>  
+    <div>
+      <h1>Debugger</h1>
+      <p id="CanvasLoc"></p>
+      <p id="PlayerLoc"></p>
+      <p id="PlayerHorizontal"></p>
+      <p id="PlayerVertical"></p>
+      <p id="Tick"></p>
+      <p id="JumpTick"></p>
+      <p id="CharCurr"></p>
+      <p id="CurrentAnim"></p>
+    </div>
+    
+    <!-- <div>
+      <h1>Details</h1>
+      <p>3 background Parallax<br>
+      Lerping Player Movement<br>
+      Camera Lags behind player<br>
+      A-D Arrow keys and Arrow Keys to move<br>
+      Space to jump<br>
+      Animation Priority Logic<br>
+      THERE ARE NO ANIMATIONS FOR GOING LEFT CUZ IM LAZY<br>
+      Double Jump<br>
+      </p>
+    </div> -->
+  </body>
+</html>
