@@ -29,10 +29,11 @@ Regen.prototype.update = function(i) {
 
 Regen.prototype.render = function() {
     let ctx = this.ctx;
-    
-    ctx.translate(-this.width/2, -this.height/2);
-    ctx.drawImage(regen, this.loc.x, this.loc.y, this.width, this.height);
-    ctx.translate(this.width/2, this.height/2);
+    ctx.beginPath();
+    ctx.arc(this.loc.x, this.loc.y, this.width/2, 0, Math.PI*2);
+    ctx.fillStyle = "red";
+    ctx.fill();
+    ctx.closePath();
 }
 
 Regen.prototype.run = function(i) {

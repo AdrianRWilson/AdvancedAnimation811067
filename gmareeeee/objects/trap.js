@@ -25,12 +25,11 @@ Trap.prototype.update = function () {
 
 Trap.prototype.render = function () {
     let ctx = this.ctx;
-    ctx.translate(-45, -45);
-    ctx.drawImage(bomb, this.loc.x, this.loc.y);
-    ctx.translate(45, 45);
-
-    //ctx.fillStyle = "black";
-    //ctx.fillRect(this.collisionLoc.x, this.collisionLoc.y, this.width, this.height);
+    ctx.beginPath();
+    ctx.arc(this.loc.x, this.loc.y, this.width/2, 0, Math.PI*2);
+    ctx.fillStyle = "orange";
+    ctx.fill();
+    ctx.closePath();
 
 }
 

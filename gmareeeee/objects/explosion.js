@@ -22,9 +22,12 @@ Boom.prototype.update = function () {
 
 Boom.prototype.render = function () {
     let ctx = this.ctx;
-    ctx.translate(-this.width / 2, -this.height / 2);
-    ctx.drawImage(Explosion[this.frame], this.loc.x, this.loc.y, Explosion[this.frame].width * this.sizeMultipler, Explosion[this.frame].height * this.sizeMultipler);
-    ctx.translate(this.width / 2, this.height / 2);
+    ctx.beginPath();
+    ctx.arc(this.loc.x, this.loc.y, this.width/(1/this.frame)/3, 0, Math.PI*2);
+    ctx.fillStyle = "yellow";
+    ctx.fill();
+    ctx.closePath();
+
 }
 
 Boom.prototype.run = function () {

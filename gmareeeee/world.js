@@ -25,78 +25,25 @@ function World() {
     this.lerpDestination = this.player.loc.x - this.playerDisplacement; //lerp destination for camera using player displacement
     this.cameraStiffness = 0.01; // camera chaseing stifness
 
-    //preview animation stuff
-    this.isPreviewing = false;
-    this.previewForward = false;
-    this.previewBackward = false;
-    this.previewFinish = true;
 
-    //parallax stuff
-    this.bg1 = new JSVector(0, this.dims.top);
-    this.bg2 = new JSVector(0, this.dims.top);
-    this.bg3 = new JSVector(0, this.dims.top);
-
-    //music
-    this.backgroundMusic = new Audio("assets/scaryForest.mp3");
-
-    //tick for world anims
     this.tickInterval = 30;
     this.tick = 0;
 
-    // size of heart
-    this.heartSizeMultiplier = 2;
 
-    //dialgue stuff
-    this.displayDialogue = true;
-    this.currentDialogue = moveDialogue;
-    this.frame = 0;
-    this.dialogueSizeMultipler = 0.3;
-    this.jumpDialogueAppear = false;
-    this.slideDialogueAppear = false;
-    this.killDialogueAppear = false;
+
 }
 
 //run function
 World.prototype.run = function () {
     this.tick++; // world tick
-    this.backgroundMusic.play(); // play backgronud music
     this.ctx.clearRect(0, 0, this.cnv.width, this.cnv.height); //refresh screen
     this.ctx.save(); //save
     this.ctx.translate(-this.cnvLoc.x, -this.cnvLoc.y); //translate to loc pos
     let ctx = this.ctx; // easier ctx reference
 
-    //parallax using looping since its better
-    for (let index = -1; index < 5; index++) {
-        //ctx.drawImage(background3, this.bg3.x + (this.cnv.width * index), this.bg3.y, this.cnv.width, this.cnv.height);
-    }
 
-    for (let index = -1; index < 5; index++) {
-        //ctx.drawImage(background2, this.bg2.x + (this.cnv.width * index), this.bg2.y, this.cnv.width, this.cnv.height);
-    }
 
-    // ground if you want???
-    // for (let index = -1; index < 5; index++) {
-    //     ctx.drawImage(background1, this.bg1.x + (this.cnv.width * index), this.bg1.y, this.cnv.width, this.cnv.height);
-    // }
-
-    //previe animatoin
-    if (this.isPreviewing) {
-        if (this.previewForward) {
-            this.lerpDestination = this.dims.width - this.cnv.width;
-            if (this.cnvLoc.x >= this.lerpDestination - 5) {
-                this.previewForward = false;
-                this.previewBackward = true;
-            }
-        } else if (this.previewBackward) {
-            this.lerpDestination = this.player.loc.x - this.playerDisplacement;
-            if (this.cnvLoc.x <= this.lerpDestination + 5) {
-                this.previewBackward = false;
-                this.isPreviewing = false;
-            }
-        }
-    } else {
-        this.lerpDestination = this.player.loc.x - this.playerDisplacement;
-    }
+    this.lerpDestination = this.player.loc.x - this.playerDisplacement;
     this.cnvLoc.x = lerp(this.cnvLoc.x, this.lerpDestination, this.cameraStiffness); // chase player with camera
     this.player.run(); //run player
     for (let i = 0; i < this.platforms.length; i++) {
@@ -117,67 +64,19 @@ World.prototype.run = function () {
         }
     }
 
-    //the most efficient way to do parallax with perecentages
-    this.bg2.x = lerp(this.bg2.x, (this.player.loc.x / 2) - this.playerDisplacement, this.cameraStiffness);
-    this.bg3.x = lerp(this.bg3.x, (this.player.loc.x / 1.5) - this.playerDisplacement, this.cameraStiffness);
-
-    //lighting
-    //ctx.drawImage(darkness, (this.player.loc.x - darkness.width / 2) + 40, this.player.loc.y - darkness.height / 2);
 
     //KEEP THIS LINE AT THE BOTTOM
     ctx.restore();
-    let healthBarLength = (this.player.health / 100); //health bar
-    if (healthBarLength <= 0) {
-        healthBarLength = 0;
-    }
-    ctx.drawImage(heartBack, 40, 30, heartBack.width * this.heartSizeMultiplier, heartBack.height * this.heartSizeMultiplier);
-    ctx.translate(14 * this.heartSizeMultiplier, 0);
-    ctx.drawImage(heartFore, 40, 30, heartFore.width * this.heartSizeMultiplier * healthBarLength, heartFore.height * this.heartSizeMultiplier);
-    ctx.translate(-14 * this.heartSizeMultiplier, 0);
+
 
     if (this.player.health <= 0) {
-        ctx.drawImage(gameOverScreen, 0, 0, this.cnv.width, this.cnv.height);
+        console.log("game over")
     }
 
     //platforms cleared logic
     if (this.platforms.length <= this.platformsCleared) {
-        ctx.drawImage(youWinScreen, 0, 0, this.cnv.width, this.cnv.height);
+        console.log("you win")
     }
-
-
-    //dialogue logic
-    if (this.player.loc.x > 230 && this.player.loc.x < 550) {
-        this.currentDialogue = jumpDialogue;
-        if (!this.jumpDialogueAppear) {
-            this.jumpDialogueAppear = true;
-            this.frame = 1;
-        }
-    } else if (this.player.loc.x > 550 && this.player.loc.x < 785) {
-        this.currentDialogue = slideDialogue;
-        if (!this.slideDialogueAppear) {
-            this.slideDialogueAppear = true;
-            this.frame = 1;
-        }
-    } else if (this.player.loc.x > 785 && this.player.loc.x < 1000) {
-        this.currentDialogue = killDialogue;
-        if (!this.killDialogueAppear) {
-            this.killDialogueAppear = true;
-            this.frame = 1;
-        }
-    }
-    else if (this.player.loc.x > 1000) {
-        this.displayDialogue = false;
-    }
-    if (this.frame >= this.currentDialogue.length - 1) {
-        this.frame = this.currentDialogue.length;
-    } else {
-        this.frame++;
-    }
-    if (this.displayDialogue) {
-        //ctx.drawImage(this.currentDialogue[this.frame - 1], 30, this.dims.height - 70, this.currentDialogue[this.frame - 1].width * this.dialogueSizeMultipler, this.currentDialogue[this.frame - 1].height * this.dialogueSizeMultipler);
-        //ctx.drawImage(blob, 40, this.dims.height - 30, 40, 40); //BLOB
-    }
-
 }
 
 
@@ -211,8 +110,6 @@ World.prototype.loadPlatforms = function (n) {
             this.platforms.push(new Platform(60 + (i * 100), this.dims.top / 2, 100, this.groundThickness, this.ctx, false, 0, true, i));
         }
     }
-    //ground if u need???
-    //this.platforms.push(new Platform(0, -this.groundThickness, this.dims.width, 30, this.ctx, true));
 }
 
 // load all the traps
@@ -222,8 +119,3 @@ World.prototype.loadTraps = function (n) {
     }
 }
 
-//previedw level bool
-World.prototype.previewLevel = function () {
-    this.isPreviewing = true;
-    this.previewForward = true;
-}

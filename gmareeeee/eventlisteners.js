@@ -57,3 +57,6 @@ window.addEventListener("keypress", function (event) {
   }
 }, false);
 
+window.addEventListener("mousedown", function (event) {
+  world.player.shoot();
+}, false);

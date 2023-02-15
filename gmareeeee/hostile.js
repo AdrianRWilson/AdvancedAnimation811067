@@ -7,10 +7,6 @@ function Hostile(x, y, ctx, goblinAnims, platformLoc, platformWidth) {
     this.terminalVelocity = this.mass * gravity;
     this.maxVel = new JSVector(0.3, this.terminalVelocity);
     this.friction = randomNumber(0.05, 0.3);
-    this.goblinRunAnim = [goblinAnims[goblinRunIndex][0], goblinAnims[goblinRunIndex][1], goblinAnims[goblinRunIndex][2], goblinAnims[goblinRunIndex][3], goblinAnims[goblinRunIndex][4], goblinAnims[goblinRunIndex][5]];
-    this.goblinCurr = 0;
-    this.goblinAnimCurr = this.goblinRunAnim;
-    this.currentImage = this.goblinAnimCurr[this.goblinCurr];
     this.sizeMultiplier = 0.4;
     let direction = Math.round(randomNumber(0, 1));
     this.moving = {
@@ -55,23 +51,11 @@ Hostile.prototype.update = function () {
 
 Hostile.prototype.render = function () {
     let ctx = this.ctx;
-    if (world.tick % world.tickInterval == 0) {
-        if (this.goblinCurr < this.goblinAnimCurr.length - 1) {
-            this.goblinCurr++;
-        } else {
-            this.goblinCurr = 0;
-        }
-    }
-    this.currentImage = this.goblinAnimCurr[this.goblinCurr];
-    if (this.currentImage == null) {
-        this.currentImage = this.goblinAnimCurr[0];
-    }
     ctx.beginPath();
     ctx.rect(this.loc.x + this.width/2, this.loc.y, this.width*2, -this.height);
     ctx.fillStyle = "green";
     ctx.fill();
     ctx.closePath();
-    //ctx.drawImage(this.currentImage, this.loc.x, this.loc.y - this.currentImage.height * this.sizeMultiplier, this.currentImage.width * this.sizeMultiplier, this.currentImage.height * this.sizeMultiplier);
 }
 
 Hostile.prototype.run = function () {
