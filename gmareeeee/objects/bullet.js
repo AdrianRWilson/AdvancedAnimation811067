@@ -14,7 +14,10 @@ function Bullet(x, y, ctx, direction) {
     this.mag = this.distance.getMagnitude();
     this.isDead = false;
     this.life = 0;
-    this.lifeSpan = 100;
+
+    this.lifeSpan = 30;
+    
+    
 }
 
 Bullet.prototype.update = function () {

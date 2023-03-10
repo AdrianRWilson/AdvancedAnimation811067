@@ -64,7 +64,7 @@ World.prototype.run = function () {
         }
     }
 
-
+    
     //KEEP THIS LINE AT THE BOTTOM
     ctx.restore();
 
