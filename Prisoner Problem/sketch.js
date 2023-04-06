@@ -18,25 +18,36 @@ function setup() {
   cnv.position(0, 70);
   background(20, 20, 20);
   loadPrisonerNumbers(100);
+  console.log(prisonerNumbers);
+
+  grid = createGrid(prisonerNumbers.length);
+  drawGrid();
+
+  slider = createSlider(1, 100, 1);
+  slider.position(10, 25);
+  slider.style("width", "100px");
+
+  cnv.mouseClicked(function () {
+    let row = floor(mouseY / gridSpacing);
+    let col = floor(mouseX / gridSpacing);
+    if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length) {
+      console.log("Out of bounds.");
+    } else {
+      let squareNumber = row * grid[0].length + col + 1;
+      run(squareNumber);
+    }
+  });
+}
+
+function run(setNumber) {
   let pn = floor(random(prisonerNumbers.length));
+  pn = setNumber;
   currentPrisoner = pn;
   resetPn = pn;
   console.log("Random Prisoner Number:" + pn + " -> " + getLoopLength(pn));
   console.log("All loops:");
   console.log(findLoops());
-  grid = createGrid(prisonerNumbers.length);
-  drawGrid();
-
-  runButton = createButton("Run");
-  runButton.position(10, 10);
-  runButton.size(80, 50);
-  runButton.mousePressed(run);
-  slider = createSlider(1, 100, 1);
-  slider.position(90, 25);
-  slider.style("width", "100px");
-}
-
-function run() {
+  loopPath = [];
   start = true;
   frameCount = 0;
 }
@@ -106,7 +117,7 @@ function drawGrid() {
 
   stroke(0, 255, 0, 50);
   strokeWeight(3);
-  for (let i = 0; i < loopPath.length - 1; i++) {
+  for (let i = 1; i < loopPath.length - 1; i++) {
     let currRow = floor((loopPath[i] - 1) / grid[0].length);
     let currCol = (loopPath[i] - 1) % grid[0].length;
     let nextRow = floor((loopPath[i + 1] - 1) / grid[0].length);
@@ -117,27 +128,40 @@ function drawGrid() {
     let endY = nextRow * gridSpacing + gridSpacing / 2;
     line(startX, startY, endX, endY);
   }
+
+  textSize(gridSpacing / 3);
+  let angle = 360 / loopPath.length;
+  let radius = loopPath.length * 5;
+  for (let i = 0; i < loopPath.length; i++) {
+    let x = cos(radians(i * angle)) * radius;
+    let y = sin(radians(i * angle)) * radius;
+    text(loopPath[i], gridSpacing * 10 + x + radius + 30, y + radius + 30);
+  }
+
+  textSize(10);
+  let radius2 = loopPath.length * 5 - 25;
+  for (let i = 0; i < loopPath.length; i++) {
+    let x = cos(radians(i * angle)) * radius2;
+    let y = sin(radians(i * angle)) * radius2;
+    text(prisonerNumbers[loopPath[i]], gridSpacing * 10 + x + radius2 + 60, y + radius2 + 50);
+  }
 }
 
 // This function updates the current prisoner's position and sets the position of the next prisoner
 function updatePrisoner() {
   if (resetPn != currentPrisoner || start) {
     start = false;
-    // Push the current prisoner's position to the loopPath array
     loopPath.push(currentPrisoner);
 
-    // Get the position of the next prisoner
     let nextPrisoner = prisonerNumbers[currentPrisoner];
 
-    // Remove the current prisoner's position from the grid
+
     grid[currentPrisoner % grid.length][floor(currentPrisoner / grid.length)] =
       -1;
 
-    // Set the position of the next prisoner on the grid
     grid[nextPrisoner % grid.length][floor(nextPrisoner / grid.length)] =
       currentPrisoner;
 
-    // Set the current prisoner to be the next prisoner
     currentPrisoner = nextPrisoner;
   }
 }

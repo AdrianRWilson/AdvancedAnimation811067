@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Page Title</title>
+</head>
+
+<body>
+    <button id="selectFileButton">Select File</button>
+    <script>
+        const button = document.querySelector('#selectFileButton');
+        button.addEventListener('click', () => {
+            fetch('/myFunction')
+                .then(response => response.text())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        });
+    </script>
+</body>
+
+</html>
