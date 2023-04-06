@@ -1,0 +1,15 @@
+{
+  "name": "blockchain-visualizer",
+  "version": "1.0.0",
+  "description": "Simple visualizer for blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "express": "^4.18.2"
+  }
+}

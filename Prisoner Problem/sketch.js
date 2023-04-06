@@ -6,7 +6,7 @@ let currentPrisoner;
 let loopPath = [];
 let opacity = 255;
 let start = false;
-let runButton, incremementButton, slider;
+let runButton, incremementButton, slider, amount;
 let w;
 let h;
 
@@ -15,10 +15,10 @@ function setup() {
   w = cnv.width;
   h = cnv.height;
 
+  let startamt = 100;
   cnv.position(0, 70);
   background(20, 20, 20);
-  loadPrisonerNumbers(100);
-  console.log(prisonerNumbers);
+  loadPrisonerNumbers(startamt);
 
   grid = createGrid(prisonerNumbers.length);
   drawGrid();
@@ -26,6 +26,18 @@ function setup() {
   slider = createSlider(1, 100, 1);
   slider.position(10, 25);
   slider.style("width", "100px");
+
+  amount = createSlider(10, 1000, startamt);
+  amount.position(120, 25);
+  amount.style("width", "100px");
+
+  runButton = createButton("Update Grid");
+  runButton.position(120, 45);
+  runButton.mousePressed(function () {
+    loadPrisonerNumbers(amount.value());
+    grid = createGrid(prisonerNumbers.length);
+    drawGrid();
+  });
 
   cnv.mouseClicked(function () {
     let row = floor(mouseY / gridSpacing);
@@ -38,6 +50,9 @@ function setup() {
     }
   });
 }
+
+
+
 
 function run(setNumber) {
   let pn = floor(random(prisonerNumbers.length));
@@ -129,21 +144,21 @@ function drawGrid() {
     line(startX, startY, endX, endY);
   }
 
-  textSize(gridSpacing / 3);
+  textSize(1000 / loopPath.length);
   let angle = 360 / loopPath.length;
-  let radius = loopPath.length * 5;
+  let radius = 280;
   for (let i = 0; i < loopPath.length; i++) {
     let x = cos(radians(i * angle)) * radius;
     let y = sin(radians(i * angle)) * radius;
-    text(loopPath[i], gridSpacing * 10 + x + radius + 30, y + radius + 30);
+    text(loopPath[i], grid.length * gridSpacing + x + 300, y + radius + 80);
   }
 
-  textSize(10);
-  let radius2 = loopPath.length * 5 - 25;
+  textSize(600 / loopPath.length);
+  let radius2 = 300;
   for (let i = 0; i < loopPath.length; i++) {
     let x = cos(radians(i * angle)) * radius2;
     let y = sin(radians(i * angle)) * radius2;
-    text(prisonerNumbers[loopPath[i]], gridSpacing * 10 + x + radius2 + 60, y + radius2 + 50);
+    text(prisonerNumbers[loopPath[i]], grid.length * gridSpacing + x + 300, y + radius2 + 60);
   }
 }
 
@@ -167,6 +182,7 @@ function updatePrisoner() {
 }
 
 function loadPrisonerNumbers(n) {
+  prisonerNumbers.splice(0, prisonerNumbers.length);
   let temp = [];
   for (let i = 0; i < n; i++) {
     temp[i] = i;
