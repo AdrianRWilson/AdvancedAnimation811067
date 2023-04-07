@@ -143,22 +143,36 @@ function drawGrid() {
   }
 
 
+
+
   let angle = 360 / loopPath.length;
   let radius = 280;
+  let trig = [];
   for (let i = 0; i < loopPath.length; i++) {
-    let x = cos(radians(i * angle)) * radius;
-    let y = sin(radians(i * angle)) * radius;
-    textSize(1000 / loopPath.length);
+    trig.push({
+      cos: cos(radians(i * angle)),
+      sin: sin(radians(i * angle))
+    });
+  }
+  textSize(1000 / loopPath.length);
+  for (let i = 0; i < loopPath.length; i++) {
+    let t = trig[i];
+    let x = t.cos * radius;
+    let y = t.sin * radius;
     text(loopPath[i], grid.length * gridSpacing + x + 300, y + radius + 80);
   }
+  pop();
 
+  push();
   textSize(600 / loopPath.length);
   let radius2 = 300;
   for (let i = 0; i < loopPath.length; i++) {
-    let x = cos(radians(i * angle)) * radius2;
-    let y = sin(radians(i * angle)) * radius2;
-    text(prisonerNumbers[loopPath[i]], grid.length * gridSpacing + x + 300, y + radius2 + 60);
+    let t = trig[i];
+    let x = t.cos * radius2;
+    let y = t.sin * radius2;
+    text(prisonerNumbers[loopPath[loopPath.length - 1 - i]], grid.length * gridSpacing + x + 300, y + radius2 + 60);
   }
+  pop();
 }
 
 function updatePrisoner() {
