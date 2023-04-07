@@ -92,10 +92,8 @@ function drawGrid() {
   let gridHeight = gridSpacing * grid.length;
 
   if (canvasWidth / canvasHeight > gridWidth / gridHeight) {
-    // Fit to height
     gridSpacing = canvasHeight / maxGridSize;
   } else {
-    // Fit to width
     gridSpacing = canvasWidth / maxGridSize;
   }
 
@@ -144,12 +142,13 @@ function drawGrid() {
     line(startX, startY, endX, endY);
   }
 
-  textSize(1000 / loopPath.length);
+
   let angle = 360 / loopPath.length;
   let radius = 280;
   for (let i = 0; i < loopPath.length; i++) {
     let x = cos(radians(i * angle)) * radius;
     let y = sin(radians(i * angle)) * radius;
+    textSize(1000 / loopPath.length);
     text(loopPath[i], grid.length * gridSpacing + x + 300, y + radius + 80);
   }
 
@@ -162,7 +161,6 @@ function drawGrid() {
   }
 }
 
-// This function updates the current prisoner's position and sets the position of the next prisoner
 function updatePrisoner() {
   if (resetPn != currentPrisoner || start) {
     start = false;
@@ -193,7 +191,6 @@ function loadPrisonerNumbers(n) {
   }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function getLoopLength(prisonerNumber) {
   let originalPrisonerNumber = prisonerNumber;
