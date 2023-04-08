@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shortest Path</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+      #city-list {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        background-color: #eee;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .citylist {
+        height: 500px; /* Set the height */
+        overflow-y: scroll; /* Enable the scrollbar */
+      }
+
+      .citylist ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .citylist li {
+        padding: 5px;
+      }
+
+      .deleteButton {
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 5px 10px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fastest way for the bitches to run away from you</h1>
+    <div>
+      <canvas id="canvas"></canvas>
+      <div id="city-list" class="citylist">
+        <h2>Cities</h2>
+        <ul></ul>
+      </div>
+    </div>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+    <script src="listeners.js"></script>
+  </body>
+</html>
