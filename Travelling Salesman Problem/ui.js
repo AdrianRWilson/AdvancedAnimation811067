@@ -4,21 +4,29 @@ function populateCityList() {
   cities.forEach((city, index) => {
     const listItem = document.createElement("li");
     const deleteButton = document.createElement("button");
-    deleteButton.style.backgroundColor = "#f44336";
-    deleteButton.style.color = "#fff";
-    deleteButton.style.border = "none";
-    deleteButton.style.borderRadius = "4px";
-    deleteButton.style.cursor = "pointer";
-    deleteButton.style.padding = "5px 10px";
-    deleteButton.style.fontSize = "14px";
+    deleteButton.className = "deleteButton";
     deleteButton.innerText = "Delete";
     deleteButton.addEventListener("click", () => {
       cities.splice(index, 1);
       animateTour(cities);
       populateCityList();
     });
-    listItem.innerText = `City ${index + 1} (${city.x}, ${city.y})`;
+    listItem.innerText = `Point ${index + 1} (${city.x}, ${city.y})`;
     listItem.appendChild(deleteButton);
     cityList.appendChild(listItem);
   });
 }
+
+function deleteAllPoints() {
+  cities = [];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  populateCityList();
+  drawCities();
+  animateTour(cities);
+}
+
+speedSlider.addEventListener("input", function () {
+  const speed = speedSlider.value;
+  timeStep = speed;
+  animateTour(cities);
+});
