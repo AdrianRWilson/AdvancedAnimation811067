@@ -15,7 +15,7 @@ function Player(x, y, ctx, playerAnims) {
     this.friction = 0.02;
     this.sizeMultiplier = 2;
     this.isColliding = 0;
-    this.jumpPower = -4;
+    this.jumpPower = -3;
     this.charDisplayDisplacement = 35;
     this.hitboxWidth = 30;
     this.hitboxheight = 63;
@@ -25,6 +25,7 @@ function Player(x, y, ctx, playerAnims) {
     this.maxJumps = 2;
     this.bullets = [];
     this.shootingDirection = true;
+    
 }
 
 Player.prototype.update = function () {
@@ -87,6 +88,10 @@ Player.prototype.update = function () {
 
     //apply velocity
     this.loc.add(this.vel);
+
+    if(world.player.health<50){
+        world.player.jumpPower = -4;
+    }
 }
 
 Player.prototype.jump = function () {
@@ -103,6 +108,8 @@ Player.prototype.shoot = function () {
     } else if (this.vel.x < 0){
         this.shootingDirection = false;
     }
+
+
     this.bullets.push(new Bullet(this.loc.x, this.loc.y, this.ctx, this.shootingDirection));
 }
 
@@ -141,7 +148,7 @@ Player.prototype.CheckCollisions = function () {
     }
     for (let i = 0; i < world.platforms.length; i++) {
         for (let j = 0; j < world.platforms[i].hostiles.length; j++) {
-            this.playerLoc = new JSVector(this.loc.x + world.player.hitboxWidth * 0.5, world.player.loc.y - world.player.hitboxheight / 2);
+            this.playerLoc = new JSVector(this.loc.x + world.player.hitboxWidth*.5, world.player.loc.y - world.player.hitboxheight / 2);
             this.distance = JSVector.subGetNew(this.playerLoc, world.platforms[i].hostiles[j].loc);
             this.mag = this.distance.getMagnitude();
             if (this.mag < 50) {
